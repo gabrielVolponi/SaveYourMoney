@@ -263,4 +263,43 @@ function calcular() {
     });
 }
 
-// ... resto do código permanece o mesmo
+// Atualizar a função de menu mobile no script.js
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    function toggleMobileMenu(e) {
+        if (e) {
+            e.stopPropagation();
+        }
+        
+        if (mobileMenu.style.width === '250px') {
+            mobileMenu.style.width = '0';
+            document.body.style.overflow = 'auto';
+        } else {
+            mobileMenu.style.width = '250px';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    menuBtn.addEventListener('click', toggleMobileMenu);
+    closeMenuBtn.addEventListener('click', toggleMobileMenu);
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        const isMenuOpen = mobileMenu.style.width === '250px';
+        const clickedOutside = !mobileMenu.contains(e.target) && e.target !== menuBtn;
+        
+        if (isMenuOpen && clickedOutside) {
+            toggleMobileMenu();
+        }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768 && mobileMenu.style.width === '250px') {
+            toggleMobileMenu();
+        }
+    });
+});

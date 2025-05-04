@@ -1,221 +1,406 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculadora Financeira</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="short out icon" href="images/calculator-solid.svg" >
-</head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="short out icon" href="images/calculator-solid.svg" />
+  </head>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
     <!-- Header -->
     <header class="bg-blue-600 text-white py-4 px-6 shadow-lg">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center">
-                <i class="fas fa-calculator text-2xl mr-2"></i>
-                <h1 class="text-xl font-bold">Calculadora Financeira Pessoal</h1>
-            </div>
-            <nav>
-                <ul class="flex space-x-6">
-                    <li><a id="incio" href="#" class="hover:text-blue-200">Início</a></li>
-                    <li><a id="sobre" href="#" class="hover:text-blue-200">Sobre</a></li>
-                    <li><a id="contato" href="#" class="hover:text-blue-200">Contato</a></li>
-                </ul>
-            </nav>
+      <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="flex items-center">
+          <i class="fas fa-calculator text-2xl mr-2"></i>
+          <h1 class="text-xl font-bold hidden md:block">
+            Calculadora Financeira Pessoal
+          </h1>
         </div>
+        <button id="menuBtn" class="md:hidden text-2xl">
+          <i class="fas fa-bars"></i>
+        </button>
+        <nav class="hidden md:block">
+          <ul class="flex space-x-6">
+            <li>
+              <a id="incio" href="#" class="hover:text-blue-200">Início</a>
+            </li>
+            <li>
+              <a id="sobre" href="#" class="hover:text-blue-200">Sobre</a>
+            </li>
+            <li>
+              <a id="contato" href="#" class="hover:text-blue-200">Contato</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
+    <div
+      id="mobileMenu"
+      class="fixed top-0 right-0 w-0 h-full bg-blue-600 text-white transition-all duration-300 overflow-hidden z-50"
+      style="width: 0"
+    >
+      <div class="p-6">
+        <button id="closeMenuBtn" class="absolute top-4 right-4 text-2xl">
+          <i class="fas fa-times"></i>
+        </button>
+        <ul class="mt-8 space-y-6 text-lg">
+          <li>
+            <a
+              href="#"
+              class="block hover:text-blue-200"
+              onclick="toggleMobileMenu()"
+              >Início</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              class="block hover:text-blue-200"
+              onclick="toggleSideMenu()"
+              >Sobre</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              class="block hover:text-blue-200"
+              onclick="toggleContactModal()"
+              >Contato</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Atualizar o menu mobile no index.html -->
+    <div
+      id="mobileMenu"
+      class="fixed top-0 right-0 w-0 h-full bg-blue-600 text-white transition-all duration-300 overflow-hidden z-50"
+      style="width: 0"
+    >
+      <div class="p-6 flex flex-col items-center justify-center h-full">
+        <button id="closeMenuBtn" class="absolute top-4 right-4 text-2xl">
+          <i class="fas fa-times"></i>
+        </button>
+        <ul class="space-y-8 text-center">
+          <li>
+            <a
+              href="#"
+              class="block text-2xl font-semibold hover:text-blue-200"
+              onclick="toggleMobileMenu()"
+            >
+              Início
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="block text-2xl font-semibold hover:text-blue-200"
+              onclick="toggleSideMenu()"
+            >
+              Sobre
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="block text-2xl font-semibold hover:text-blue-200"
+              onclick="toggleContactModal()"
+            >
+              Contato
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
     <!-- Main Content -->
-    <main class="flex-grow container mx-auto p-8">
-        <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <div class="mb-8 text-center">
-                <h2 class="text-3xl font-bold text-blue-600 mb-4">Planejamento Financeiro</h2>
-                <p class="text-gray-600">Calcule seu valor/hora e descubra seu potencial de economia anual</p>
-            </div>
-            
-            <div class="grid gap-6">
-                <div class="bg-blue-50 p-4 rounded-lg">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        <i class="fas fa-money-bill-wave mr-2"></i>Salário Mensal (R$)
-                    </label>
-                    <input type="number" id="salario" placeholder="Ex: 3000" 
-                           class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                </div>
-
-                <div class="bg-blue-50 p-4 rounded-lg">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        <i class="fas fa-clock mr-2"></i>Horas Trabalhadas por Mês
-                    </label>
-                    <input type="number" id="horas" placeholder="Ex: 160" 
-                           class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                </div>
-
-                <button onclick="calcular()" 
-                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
-                    <i class="fas fa-calculator mr-2"></i>
-                    Calcular
-                </button>
-
-                <div class="bg-gray-50 rounded-lg p-6">
-    <h3 class="font-bold text-xl mb-4 text-blue-600">Resultados da Análise</h3>
-    <div class="space-y-4">
-        <div class="p-3 bg-white rounded shadow-sm">
-            <p class="text-gray-700">Valor por hora trabalhada:
-                <span id="valorHora" class="font-bold text-blue-600">R$ 0,00</span>
-            </p>
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+      <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-4 md:p-8">
+        <div class="mb-8 text-center">
+          <h2 class="text-3xl font-bold text-blue-600 mb-4">
+            Planejamento Financeiro
+          </h2>
+          <p class="text-gray-600">
+            Calcule seu valor/hora e descubra seu potencial de economia anual
+          </p>
         </div>
 
-        <div class="bg-white p-4 rounded shadow-sm">
-            <h4 class="font-semibold mb-3">Potencial de Economia</h4>
-            <div class="space-y-6">
-                <!-- Economia Conservadora -->
-                <div class="border-b pb-4">
-                    <h5 class="text-lg font-semibold text-blue-600 mb-2">Economia Conservadora (25%)</h5>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-blue-50 p-3 rounded">
-                            <p class="text-sm text-gray-600">Mensal:</p>
-                            <p id="conservadoraMensal" class="font-bold text-green-600">R$ 0,00</p>
-                        </div>
-                        <div class="bg-blue-50 p-3 rounded">
-                            <p class="text-sm text-gray-600">Anual:</p>
-                            <p id="conservadoraAnual" class="font-bold text-green-600">R$ 0,00</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="grid gap-6">
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <label class="block text-gray-700 font-semibold mb-2">
+              <i class="fas fa-money-bill-wave mr-2"></i>Salário Mensal (R$)
+            </label>
+            <input
+              type="number"
+              id="salario"
+              placeholder="Ex: 3000"
+              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-                <!-- Economia Moderada -->
-                <div class="border-b pb-4">
-                    <h5 class="text-lg font-semibold text-blue-600 mb-2">Economia Moderada (30%)</h5>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-blue-50 p-3 rounded">
-                            <p class="text-sm text-gray-600">Mensal:</p>
-                            <p id="moderadaMensal" class="font-bold text-green-600">R$ 0,00</p>
-                        </div>
-                        <div class="bg-blue-50 p-3 rounded">
-                            <p class="text-sm text-gray-600">Anual:</p>
-                            <p id="moderadaAnual" class="font-bold text-green-600">R$ 0,00</p>
-                        </div>
-                    </div>
-                </div>
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <label class="block text-gray-700 font-semibold mb-2">
+              <i class="fas fa-clock mr-2"></i>Horas Trabalhadas por Mês
+            </label>
+            <input
+              type="number"
+              id="horas"
+              placeholder="Ex: 160"
+              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-                <!-- Economia Agressiva -->
-                <div class="pb-2">
-                    <h5 class="text-lg font-semibold text-blue-600 mb-2">Economia Agressiva (50%)</h5>
+          <button
+            onclick="calcular()"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+          >
+            <i class="fas fa-calculator mr-2"></i>
+            Calcular
+          </button>
+
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="font-bold text-xl mb-4 text-blue-600">
+              Resultados da Análise
+            </h3>
+            <div class="space-y-4">
+              <div class="p-3 bg-white rounded shadow-sm">
+                <p class="text-gray-700">
+                  Valor por hora trabalhada:
+                  <span id="valorHora" class="font-bold text-blue-600"
+                    >R$ 0,00</span
+                  >
+                </p>
+              </div>
+
+              <div class="bg-white p-4 rounded shadow-sm">
+                <h4 class="font-semibold mb-3">Potencial de Economia</h4>
+                <div class="space-y-6">
+                  <!-- Economia Conservadora -->
+                  <div class="border-b pb-4">
+                    <h5 class="text-lg font-semibold text-blue-600 mb-2">
+                      Economia Conservadora (25%)
+                    </h5>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-blue-50 p-3 rounded">
-                            <p class="text-sm text-gray-600">Mensal:</p>
-                            <p id="agressivaMensal" class="font-bold text-green-600">R$ 0,00</p>
-                        </div>
-                        <div class="bg-blue-50 p-3 rounded">
-                            <p class="text-sm text-gray-600">Anual:</p>
-                            <p id="agressivaAnual" class="font-bold text-green-600">R$ 0,00</p>
-                        </div>
+                      <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">Mensal:</p>
+                        <p
+                          id="conservadoraMensal"
+                          class="font-bold text-green-600"
+                        >
+                          R$ 0,00
+                        </p>
+                      </div>
+                      <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">Anual:</p>
+                        <p
+                          id="conservadoraAnual"
+                          class="font-bold text-green-600"
+                        >
+                          R$ 0,00
+                        </p>
+                      </div>
                     </div>
+                  </div>
+
+                  <!-- Economia Moderada -->
+                  <div class="border-b pb-4">
+                    <h5 class="text-lg font-semibold text-blue-600 mb-2">
+                      Economia Moderada (30%)
+                    </h5>
+                    <div class="grid grid-cols-2 gap-4">
+                      <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">Mensal:</p>
+                        <p id="moderadaMensal" class="font-bold text-green-600">
+                          R$ 0,00
+                        </p>
+                      </div>
+                      <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">Anual:</p>
+                        <p id="moderadaAnual" class="font-bold text-green-600">
+                          R$ 0,00
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Economia Agressiva -->
+                  <div class="pb-2">
+                    <h5 class="text-lg font-semibold text-blue-600 mb-2">
+                      Economia Agressiva (50%)
+                    </h5>
+                    <div class="grid grid-cols-2 gap-4">
+                      <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">Mensal:</p>
+                        <p
+                          id="agressivaMensal"
+                          class="font-bold text-green-600"
+                        >
+                          R$ 0,00
+                        </p>
+                      </div>
+                      <div class="bg-blue-50 p-3 rounded">
+                        <p class="text-sm text-gray-600">Anual:</p>
+                        <p id="agressivaAnual" class="font-bold text-green-600">
+                          R$ 0,00
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
-            </div>
-        </div>
+      </div>
     </main>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Sobre a Calculadora</h3>
-                    <p class="text-gray-400">
-                        Ferramenta desenvolvida para auxiliar no planejamento financeiro pessoal,
-                        permitindo análises de rendimentos e potencial de economia.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Links Úteis</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white">Educação Financeira</a></li>
-                        <li><a href="#" class="hover:text-white">Dicas de Investimento</a></li>
-                        <li><a href="#" class="hover:text-white">Blog</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Contato</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><i class="fas fa-envelope mr-2"></i>gabrielvolponi11@gmail.com</li>
-                        <li><i class="fas fa-phone mr-2"></i>(11) 91287-9966</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
-                <p>&copy; 2025 Calculadora Financeira. Todos os direitos reservados.</p>
-            </div>
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center md:text-left">
+            <h3 class="text-lg font-bold mb-4">Sobre a Calculadora</h3>
+            <p class="text-gray-400">
+              Ferramenta desenvolvida para auxiliar no planejamento financeiro
+              pessoal, permitindo análises de rendimentos e potencial de
+              economia.
+            </p>
+          </div>
+          <div class="text-center md:text-left">
+            <h3 class="text-lg font-bold mb-4">Links Úteis</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <a href="#" class="hover:text-white">Educação Financeira</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white">Dicas de Investimento</a>
+              </li>
+              <li><a href="#" class="hover:text-white">Blog</a></li>
+            </ul>
+          </div>
+          <div class="text-center md:text-left">
+            <h3 class="text-lg font-bold mb-4">Contato</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <i class="fas fa-envelope mr-2"></i>gabrielvolponi11@gmail.com
+              </li>
+              <li><i class="fas fa-phone mr-2"></i>(11) 91287-9966</li>
+            </ul>
+          </div>
         </div>
+        <div
+          class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400"
+        >
+          <p>
+            &copy; 2025 Calculadora Financeira. Todos os direitos reservados.
+          </p>
+        </div>
+      </div>
     </footer>
 
-    <div id="sideMenu" class="fixed top-0 right-0 h-full w-0 bg-white shadow-2xl transition-all duration-300 overflow-hidden">
-    <div class="p-8 relative">
-        <button onclick="toggleSideMenu()" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
-            <i class="fas fa-times text-xl"></i>
+    <div
+      id="sideMenu"
+      class="fixed top-0 right-0 h-full w-0 bg-white shadow-2xl transition-all duration-300 overflow-hidden"
+    >
+      <div class="p-8 relative">
+        <button
+          onclick="toggleSideMenu()"
+          class="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+        >
+          <i class="fas fa-times text-xl"></i>
         </button>
 
-        <h2 class="text-2xl font-bold text-blue-600 mb-6">Sobre o Aplicativo</h2>
+        <h2 class="text-2xl font-bold text-blue-600 mb-6">
+          Sobre o Aplicativo
+        </h2>
 
         <div class="prose text-gray-600">
-            <p class="mb-4">
-                A Calculadora Financeira Pessoal é uma ferramenta desenvolvida para ajudar pessoas a terem mais consciência sobre seus ganhos e potencial de economia.
-            </p>
+          <p class="mb-4">
+            A Calculadora Financeira Pessoal é uma ferramenta desenvolvida para
+            ajudar pessoas a terem mais consciência sobre seus ganhos e
+            potencial de economia.
+          </p>
 
-            <h3 class="text-xl font-semibold text-blue-600 mt-6 mb-3">Principais Funcionalidades:</h3>
-            <ul class="list-disc pl-5 space-y-2">
-                <li>Cálculo do valor da sua hora de trabalho</li>
-                <li>Simulação de economia anual em diferentes cenários</li>
-                <li>Análise de potencial de investimento</li>
-            </ul>
+          <h3 class="text-xl font-semibold text-blue-600 mt-6 mb-3">
+            Principais Funcionalidades:
+          </h3>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>Cálculo do valor da sua hora de trabalho</li>
+            <li>Simulação de economia anual em diferentes cenários</li>
+            <li>Análise de potencial de investimento</li>
+          </ul>
 
-            <p class="mt-6">
-                Este projeto foi criado com o objetivo de promover educação financeira e ajudar pessoas a tomarem melhores decisões sobre suas finanças pessoais.
-            </p>
+          <p class="mt-6">
+            Este projeto foi criado com o objetivo de promover educação
+            financeira e ajudar pessoas a tomarem melhores decisões sobre suas
+            finanças pessoais.
+          </p>
         </div>
+      </div>
     </div>
-</div>
-    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden flex items-center justify-center">
-    <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+    <div
+      id="contactModal"
+      class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden flex items-center justify-center"
+    >
+      <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-blue-600">Contato</h2>
-            <button onclick="toggleContactModal()" class="text-gray-600 hover:text-gray-800">
-                <i class="fas fa-times text-xl"></i>
-            </button>
+          <h2 class="text-2xl font-bold text-blue-600">Contato</h2>
+          <button
+            onclick="toggleContactModal()"
+            class="text-gray-600 hover:text-gray-800"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
         </div>
 
         <form id="contactForm" onsubmit="handleSubmit(event)" class="space-y-4">
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">Nome</label>
-                <input type="text" id="nome" required
-                    class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2">Nome</label>
+            <input
+              type="text"
+              id="nome"
+              required
+              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">Email</label>
-                <input type="email" id="email" required
-                    class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2">Email</label>
+            <input
+              type="email"
+              id="email"
+              required
+              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">Sugestão</label>
-                <textarea id="sugestao" required rows="4"
-                    class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
-            </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+              >Sugestão</label
+            >
+            <textarea
+              id="sugestao"
+              required
+              rows="4"
+              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            ></textarea>
+          </div>
 
-            <button type="submit"
-                class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
-                <i class="fas fa-paper-plane mr-2"></i>
-                Enviar
-            </button>
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+          >
+            <i class="fas fa-paper-plane mr-2"></i>
+            Enviar
+          </button>
         </form>
+      </div>
     </div>
-</div>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
